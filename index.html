@@ -89,28 +89,13 @@
         const data = JSON.parse(message.payloadString);
         console.log(data);
         const tempVal = document.getElementById("temp_value");
-        tempVal.innerHTML = data.temperature;
+        tempVal.innerHTML = data.temperature + " °C";
         const humidVal = document.getElementById("humid_value");
-        humidVal.innerHTML = data.humidity;
+        humidVal.innerHTML = data.humidity + " rH";
         const pressureVal = document.getElementById("pressure_value");
-        pressureVal.innerHTML = data.pressure;
+        pressureVal.innerHTML = data.pressure + " hPa";
       }
-      //   const update_values = async () => {
-      //     const resp = await fetch("/api/sensor");
-      //     const data = await resp.json();
-      //     if (data.idx > data_idx) {
-      //       var temp_value = document.getElementById("temp_value");
-      //       temp_value.innerText = data.temp;
-      //       var humid_value = document.getElementById("humid_value");
-      //       humid_value.innerText = data.humid;
-      //       console.log("New value");
-      //       data_idx = data.idx;
-      //     } else {
-      //       console.log("Old value");
-      //     }
-      //   };
       document.addEventListener("init", () => {
-        // setInterval(update_values, 2000);
         liff
           .init({
             liffId: "1657755264-b3ogKP2N",
