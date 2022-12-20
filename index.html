@@ -87,6 +87,7 @@
       function onMessageArrived(message) {
         console.log("onMessageArrived:" + message.payloadString);
         const data = JSON.parse(message.payloadString);
+        console.log(data);
         const tempVal = document.getElementById("temp_value");
         tempVal.innerHTML = data.temperature;
         const humidVal = document.getElementById("humid_value");
@@ -112,7 +113,7 @@
         // setInterval(update_values, 2000);
         liff
           .init({
-            liffId: "1657522967-bOa4aZVD",
+            liffId: "1657755264-b3ogKP2N",
           })
           .then(() => {
             var btn = document.getElementById("hello-button");
