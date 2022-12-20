@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/onsenui/css/onsen-css-components.min.css"
+    />
+    <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+    <script
+      charset="utf-8"
+      src="https://static.line-scdn.net/liff/edge/2/sdk.js"
+    ></script>
+    <title>LIFF App</title>
+  </head>
+  <body>
+    <h1>Hello, World!</h1>
+    <ons-navigator swipeable id="myNavigator" page="page1.html"></ons-navigator>
+
+    <template id="page1.html">
+      <ons-page id="page1">
+        <ons-toolbar>
+          <div class="center">CN466 demo</div>
+        </ons-toolbar>
+
+        <ons-list>
+          <ons-list-header>Sensors</ons-list-header>
+          <ons-list-item>
+            <div class="center">Temperature</div>
+            <div class="right">
+              <ons-input placeholder="waiting" id="temp_value"></ons-input>
+            </div>
+          </ons-list-item>
+          <ons-list-item>
+            <div class="center">Humidity</div>
+            <div class="right">
+              <ons-input placeholder="waiting" id="humid_value"></ons-input>
+            </div>
+          </ons-list-item>
+          <ons-list-item>
+            <div class="center">Pressure</div>
+            <div class="right">
+              <ons-input placeholder="waiting" id="pressure_value"></ons-input>
+            </div>
+          </ons-list-item>
+        </ons-list>
+
+        <ons-button modifier="large" id="hello-button">Send</ons-button>
+      </ons-page>
+    </template>
+
+    <script>
+      let client = new Paho.MQTT.Client(
+        "broker.hivemq.com",
+        8884,
+        "esp32-client"
+      );
+      var data_idx = 0;
+
+      // set callback handlers
+      client.onConnectionLost = onConnectionLost;
+      client.onMessageArrived = onMessageArrived;
+
+      // connect the client
+      client.connect({ onSuccess: onConnect, useSSL: true });
+
+      function onConnect() {
+        // Once a connection has been made, make a subscription and send a message.
+        console.log("onConnect");
+        client.subscribe("cn466/cucumber_4/sensor");
+        //message = new Paho.MQTT.Message("Hello");
+        //message.destinationName = "World";
+        //client.send(message);
+      }
+
+      function onConnectionLost(responseObject) {
+        if (responseObject.errorCode !== 0) {
+          console.log("onConnectionLost:" + responseObject.errorMessage);
+        }
+      }
+
+      // called when a message arrives
+      function onMessageArrived(message) {
+        console.log("onMessageArrived:" + message.payloadString);
+        const data = JSON.parse(message.payloadString);
+        const tempVal = document.getElementById("temp_value");
+        tempVal.innerHTML = data.temperature;
+        const humidVal = document.getElementById("humid_value");
+        humidVal.innerHTML = data.humidity;
+        const pressureVal = document.getElementById("pressure_value");
+        pressureVal.innerHTML = data.pressure;
+      }
+      //   const update_values = async () => {
+      //     const resp = await fetch("/api/sensor");
+      //     const data = await resp.json();
+      //     if (data.idx > data_idx) {
+      //       var temp_value = document.getElementById("temp_value");
+      //       temp_value.innerText = data.temp;
+      //       var humid_value = document.getElementById("humid_value");
+      //       humid_value.innerText = data.humid;
+      //       console.log("New value");
+      //       data_idx = data.idx;
+      //     } else {
+      //       console.log("Old value");
+      //     }
+      //   };
+      document.addEventListener("init", () => {
+        // setInterval(update_values, 2000);
+        liff
+          .init({
+            liffId: "1657522967-bOa4aZVD",
+          })
+          .then(() => {
+            var btn = document.getElementById("hello-button");
+            btn.onclick = async () => {
+              liff.sendMessages([
+                {
+                  type: "text",
+                  text: "Hello, World!",
+                },
+              ]);
+            };
+          })
+          .catch((err) => {
+            console.log(err.code, err.message);
+          });
+      });
+    </script>
+  </body>
+</html>
