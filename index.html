@@ -14,7 +14,10 @@
       charset="utf-8"
       src="https://static.line-scdn.net/liff/edge/2/sdk.js"
     ></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js"
+      type="text/javascript"
+    ></script>
     <title>LIFF App</title>
   </head>
   <body>
@@ -24,7 +27,7 @@
     <template id="page1.html">
       <ons-page id="page1">
         <ons-toolbar>
-          <div class="center">CN466 demo</div>
+          <div class="center">Alert THP</div>
         </ons-toolbar>
 
         <ons-list>
@@ -49,7 +52,7 @@
           </ons-list-item>
         </ons-list>
 
-        <ons-button modifier="large" id="hello-button">Send</ons-button>
+        <ons-button modifier="large" id="send-button">Send</ons-button>
       </ons-page>
     </template>
 
@@ -101,12 +104,28 @@
             liffId: "1657755264-b3ogKP2N",
           })
           .then(() => {
-            var btn = document.getElementById("hello-button");
+            const tempVal = document.getElementById("temp_value");
+            const humidVal = document.getElementById("humid_value");
+            humidVal.innerHTML = data.humidity + " rH";
+            const pressureVal = document.getElementById("pressure_value");
+            pressureVal.innerHTML = data.pressure + " hPa";
+            var btn = document.getElementById("send-button");
             btn.onclick = async () => {
+              let tVal = tempVal.innerHTML;
+              let hVal = humidVal.innerHTML;
+              let pVal = pressureVal.innerHTML;
               liff.sendMessages([
                 {
                   type: "text",
-                  text: "Hello, World!",
+                  text: `Temperature: ${tVal}`,
+                },
+                {
+                  type: "text",
+                  text: `Humidity: ${hVal}`,
+                },
+                {
+                  type: "text",
+                  text: `Pressure: ${pVal}`,
                 },
               ]);
             };
