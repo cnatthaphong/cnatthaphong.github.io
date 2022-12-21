@@ -104,28 +104,12 @@
             liffId: "1657755264-b3ogKP2N",
           })
           .then(() => {
-            const tempVal = document.getElementById("temp_value");
-            const humidVal = document.getElementById("humid_value");
-            humidVal.innerHTML = data.humidity + " rH";
-            const pressureVal = document.getElementById("pressure_value");
-            pressureVal.innerHTML = data.pressure + " hPa";
             var btn = document.getElementById("send-button");
             btn.onclick = async () => {
-              let tVal = tempVal.innerHTML;
-              let hVal = humidVal.innerHTML;
-              let pVal = pressureVal.innerHTML;
               liff.sendMessages([
                 {
                   type: "text",
-                  text: `Temperature: ${tVal}`,
-                },
-                {
-                  type: "text",
-                  text: `Humidity: ${hVal}`,
-                },
-                {
-                  type: "text",
-                  text: `Pressure: ${pVal}`,
+                  text: 'Send Data',
                 },
               ]);
             };
